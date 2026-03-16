@@ -32,7 +32,7 @@ jobs:
         run: npm ci
 
       - name: Export Expo web build
-        run: npx expo export --platform web
+        run: npm run build:web
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
