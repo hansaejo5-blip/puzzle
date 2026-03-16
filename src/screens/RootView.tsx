@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Animated,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -20,6 +21,8 @@ import { palette, spacing } from "../theme";
 import { BoosterType, MissionProgress, TileData } from "../types/game";
 import { getDailyKey } from "../utils/date";
 import { triggerWarningFeedback, triggerWinFeedback } from "../services/feedback";
+
+const CAN_USE_NATIVE_DRIVER = Platform.OS !== "web";
 
 function useLocale() {
   const language = useGameStore((state) => state.settings.language);
@@ -74,9 +77,9 @@ function SplashScreen() {
   const fade = useRef(new Animated.Value(0)).current;
   useEffect(() => {
     Animated.sequence([
-      Animated.timing(fade, { toValue: 1, duration: 700, useNativeDriver: true }),
+      Animated.timing(fade, { toValue: 1, duration: 700, useNativeDriver: CAN_USE_NATIVE_DRIVER }),
       Animated.delay(450),
-      Animated.timing(fade, { toValue: 0.85, duration: 350, useNativeDriver: true })
+      Animated.timing(fade, { toValue: 0.85, duration: 350, useNativeDriver: CAN_USE_NATIVE_DRIVER })
     ]).start();
   }, [fade]);
   return (
@@ -423,7 +426,7 @@ function VictoryScreen() {
   const currentLevel = useGameStore((state) => state.currentLevel);
   const scale = useRef(new Animated.Value(0.8)).current;
   useEffect(() => {
-    Animated.spring(scale, { toValue: 1, friction: 5, useNativeDriver: true }).start();
+    Animated.spring(scale, { toValue: 1, friction: 5, useNativeDriver: CAN_USE_NATIVE_DRIVER }).start();
     triggerWinFeedback(useGameStore.getState().settings.vibrationOn);
   }, [scale]);
   return (
